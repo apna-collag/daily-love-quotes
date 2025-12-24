@@ -4,119 +4,122 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>For Asmita — Today's Quote</title>
+
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { height: 100%; overflow: hidden; }
-body {
-  font-family: "Helvetica Neue", Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Segoe UI Emoji";
-  display: grid;
-  place-items: center;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(255,218,233,0.15), transparent 10%),
-              radial-gradient(900px 500px at 90% 90%, rgba(210,235,255,0.08), transparent 10%),
-              linear-gradient(180deg, #0f172a 0%, #071129 100%);
-  color: #fff;
-  padding: 28px;
-  text-rendering: optimizeLegibility;
-}
+html,body { height: 100%; overflow: hidden; font-family: system-ui, -apple-system, Segoe UI, Roboto; }
+body { display: grid; place-items: center; background: linear-gradient(180deg, #0f172a, #071129); color: #fff; padding: 28px; transition: background 2s ease; }
 
 .card {
   width: min(980px, 96%);
-  max-height: 90vh;
-  overflow-y: auto;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  background: rgba(255,255,255,0.04);
   border-radius: 18px;
   padding: 44px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
-  backdrop-filter: blur(6px) saturate(120%);
-  border: 1px solid rgba(255,255,255,0.04);
   text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
   position: relative;
+  z-index: 5;
+  transition: background 1s, border 1s, color 1s;
 }
-.card::-webkit-scrollbar { width: 6px; }
-.card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
 
-.date { font-size: 14px; opacity: 0.75; letter-spacing: 0.6px; margin-bottom: 16px; }
-.title { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom: 18px; }
-.heart {
-  width:46px; height:46px;
-  background: linear-gradient(135deg,#ff8fb3,#ff5e9e);
-  border-radius: 50%;
-  display:grid; place-items:center;
-  box-shadow: 0 6px 24px rgba(255,95,158,0.18);
-  transform: scale(1);
-  animation: pulse 2.8s infinite;
-}
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
-.title h1 { font-size: clamp(18px, 2.3vw, 22px); font-weight: 700; letter-spacing: 0.4px; }
+.date { opacity: .7; margin-bottom: 12px; font-weight: 600; }
+.title { display:flex; gap:12px; justify-content:center; align-items:center; }
+.title h1 { font-weight: 700; }
+.heart { width:42px; height:42px; display:grid; place-items:center; background:#ff5e9e; border-radius:50%; animation:pulse 2.8s infinite; }
+@keyframes pulse { 50%{transform:scale(1.08)} }
 
-.quote {
-  font-size: clamp(18px, 2.8vw, 32px);
-  line-height: 1.18;
-  font-weight: 700;
-  margin: 18px 0 24px;
-  text-shadow: 0 8px 30px rgba(2,6,23,0.6);
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 700ms ease, transform 700ms ease;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
+.quote { font-size: clamp(18px, 2.6vw, 30px); margin: 24px 0; opacity: 0; transform: translateY(40px); transition: all .8s ease; white-space: pre-wrap; }
 .quote.show { opacity: 1; transform: translateY(0); }
 
-.sub { opacity: 0.85; font-size: 15px; margin-bottom: 20px; }
-.actions { display:flex; gap:10px; justify-content:center; margin-top: 10px; flex-wrap:wrap; }
-button {
-  border: 0;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.06);
+.actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+button { padding:10px 14px; border-radius:10px; border:0; background:rgba(255,255,255,.08); color:white; cursor:pointer; font-weight: 600; }
+
+/* Overlay */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); opacity:0; transition:opacity 1.5s ease; pointer-events:none; z-index:3; }
+.overlay.show { opacity:1; }
+
+/* Floating Hearts */
+.floating { position:fixed; bottom:-40px; font-size:24px; animation:floatUp 6s linear; }
+@keyframes floatUp { to { transform:translateY(-120vh); opacity:0 } }
+
+/* Snow */
+.snow { position:fixed; top:-30px; font-size:20px; animation:snowFall linear; }
+@keyframes snowFall { to { transform:translateY(120vh); } }
+
+/* Balloons */
+.balloon { position:fixed; bottom:-60px; font-size:32px; animation:balloonUp 9s ease-in; }
+@keyframes balloonUp { to { transform:translateY(-120vh); opacity:0 } }
+
+/* Confetti */
+.confetti { position:fixed; width:8px; height:14px; background:hsl(var(--h),90%,60%); animation:confetti 4s ease-out; }
+@keyframes confetti { to { transform:translateY(120vh) rotate(720deg); opacity:0 } }
+
+/* Christmas Decorations */
+.christmas-deco { position:fixed; font-size:48px; z-index: 10; }
+.christmas-tree { left: 5%; bottom: 0; animation: sway 3s ease-in-out infinite alternate; }
+.santa { right: 5%; bottom: 0; animation: floatSanta 4s ease-in-out infinite alternate; }
+.mistletoe { left: 45%; top: 10%; }
+.jingle { right: 25%; top: 15%; }
+@keyframes sway { 0%{transform: rotate(-5deg);} 100%{transform: rotate(5deg);} }
+@keyframes floatSanta { 0%{transform: translateY(0);} 50%{transform: translateY(-15px);} 100%{transform: translateY(0);} }
+
+/* ================= CHRISTMAS THEME COLORS ================= */
+body.christmas {
+  background: radial-gradient(circle,#8B0000CC,#071129);
+}
+body.christmas .card {
+  background: rgba(139, 0, 0, 0.7);
+  border:2px solid #fff;
   color: #fff;
-  font-weight: 600;
-  cursor:pointer;
-  backdrop-filter: blur(4px);
-  transition: transform .12s ease, background .12s ease;
 }
-button:active { transform: translateY(1px) scale(.997); }
-.muted { opacity:0.85; font-size:13px; }
-.credits { margin-top: 14px; opacity: 0.6; font-size: 13px; }
+body.christmas .date { color: #FFD700; font-weight: 800; }
+body.christmas .title h1 { color: #FF4500; }
+body.christmas .quote { color: #FFFFFF; font-weight: 700; }
 
-.floating-heart {
-  position: absolute;
-  font-size: 20px;
-  opacity: 0.8;
-  animation: floatUp linear infinite;
-  pointer-events: none;
-  user-select: none;
+/* ================= BIRTHDAY THEME COLORS ================= */
+body.birthday {
+  background: radial-gradient(circle,#FFCC00CC,#FF66CC66,#66CCFF66);
 }
-@keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 50% { opacity: 1; } 100% { transform: translateY(-600px) scale(1.2); opacity: 0; } }
+body.birthday .card {
+  background: rgba(255,255,255,0.2);
+  border:2px dashed #fff;
+  color: #222;
+}
+body.birthday .date { color: #FF3366; font-weight: 700; }
+body.birthday .title h1 { color: #FF6600; }
+body.birthday .quote { color: #222; font-weight: 700; }
 
-@media (max-width:520px){
-  .card { padding: 26px; border-radius: 14px; }
-  .heart { width:40px; height:40px; }
-  .quote { font-size: 20px; }
-}
 </style>
 </head>
+
 <body>
-<div class="card" role="main" aria-live="polite">
-  <div class="date" id="dateLabel">—</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="card">
+  <div class="date" id="dateLabel"></div>
   <div class="title">
-    <div class="heart" aria-hidden="true">💖</div>
-    <h1>Today’s special quote for Asmita</h1>
+    <div class="heart">💖</div>
+    <h1>Today’s special quote</h1>
   </div>
-  <div class="quote" id="quoteText">Loading...</div>
-  <div class="sub" id="subText">Open this page each day to see the daily surprise ❤️</div>
+  <div class="quote" id="quoteText">Loading…</div>
   <div class="actions">
-    <button id="copyBtn">Copy quote</button>
-    <button id="prevBtn">◀ Previous day</button>
-    <button id="musicBtn">▶ Play Music</button>
+    <button id="prevBtn">◀ Previous Day</button>
+    <button id="copyBtn">Copy Quote</button>
+    <button id="playBtn">▶ Play Music</button>
     <button id="bookmarkBtn">☆ Bookmark</button>
   </div>
-  <div class="credits muted" id="hint">Tip: Save this file and set it as Chrome's startup page for the full effect.</div>
 </div>
 
+<!-- Christmas Decorations -->
+<div class="christmas-deco christmas-tree">🎄</div>
+<div class="christmas-deco santa">🎅</div>
+<div class="christmas-deco mistletoe">🌿</div>
+<div class="christmas-deco jingle">🔔</div>
+
 <script>
-// Quotes JSON with music
+/* ================== QUOTES ================== */
 const quotes = [
   { "date": "2025-12-06", "quote": "Asmita my babyy im falling for for you everyday harder than yesterday Rest well Eat Well And Keep Smiling Cutiee I LOVE YOU BABYY", "music":"music/_DAY6.mp3" },
   { "date": "2025-12-07", "quote": "Babbyy dayss may be hard But You make me harder HIHIHIIH .Never Stop Trying Babbyyy I reallyy belive You'll acheive everything you dream off I LOVE YOU BABYY", "music":"music/_DAY7.wav" },
@@ -145,81 +148,131 @@ const quotes = [
   {"date": "2025-12-30","quote": "BABYY WE ALMOST REACHED THE END OF THE YEAR AND YAAA PTA NHII KYAA FEEL KRRA HOON THORA EMOTIONAL BOHT ZADA HAPPPYY BOOHT ZADA GRATEFUL ANDD BOHHT ZADA LOOOOOOOOOVED HIHIH KYUKII TMM JO HOOOO BABBBYY I LOOOOOVE YOU CUTIIEEE"},
   {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOU BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE EMOTIONAL CONNECTION AND HMARA BABYYSHIP NEVER ENDS"}
 ];
+const map = new Map(quotes.map(q=>[q.date,q]));
 
-const map = new Map();
-quotes.forEach(q => map.set(q.date, q));
+/* ================== ELEMENTS ================== */
+const quoteEl = document.getElementById("quoteText");
+const dateLabel = document.getElementById("dateLabel");
+const overlay = document.getElementById("overlay");
+const prevBtn = document.getElementById("prevBtn");
+const copyBtn = document.getElementById("copyBtn");
+const playBtn = document.getElementById("playBtn");
+const bookmarkBtn = document.getElementById("bookmarkBtn");
 
-function pad(n){ return n<10 ? '0'+n : ''+n; }
-function todayKey(offsetDays = 0) {
-  const d = new Date();
-  d.setDate(d.getDate() + offsetDays);
-  const y = d.getFullYear();
-  const m = pad(d.getMonth() + 1);
-  const day = pad(d.getDate());
-  return `${y}-${m}-${day}`;
+/* ================== DATE LOGIC ================== */
+function pad(n){return n<10?"0"+n:n}
+function todayKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function showQuote(key){
+  const q = map.get(key) || {quote:"You are always loved ❤️"};
+  dateLabel.textContent = `For ${new Date(key).toLocaleDateString('en-US', {day:'numeric', month:'short', year:'numeric'})} — made with love ❤️`;
+  quoteEl.textContent = q.quote;
+  quoteEl.classList.add("show");
 }
 
-const quoteEl = document.getElementById('quoteText');
-const dateLabel = document.getElementById('dateLabel');
-const subText = document.getElementById('subText');
-let currentOffset = 0;
-let audio = null;
+/* ================== INITIAL SHOW ================== */
+let currentDate = todayKey();
+showQuote(currentDate);
 
-function showForOffset(offset) {
-  const key = todayKey(offset);
-  const humanDate = new Date(); humanDate.setDate(humanDate.getDate() + offset);
-  dateLabel.textContent = humanDate.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+/* ================== PREVIOUS DAY ================== */
+prevBtn.onclick = () => {
+  const d = new Date(currentDate);
+  d.setDate(d.getDate() - 1);
+  currentDate = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  showQuote(currentDate);
+};
 
-  const qObj = map.get(key);
-  if(qObj){
-    quoteEl.textContent = qObj.quote;
-    subText.textContent = `For ${dateLabel.textContent} — made with love ❤️`;
+/* ================== COPY ================== */
+copyBtn.onclick = () => {
+  navigator.clipboard.writeText(quoteEl.innerText);
+  alert("Copied ❤️");
+};
 
-    if(audio) audio.pause();
-    audio = new Audio(qObj.music);
-  } else {
-    quoteEl.textContent = "No special quote set for this date — but you're always loved ❤️";
-    subText.textContent = "Tip: The special December quotes appear between Dec 6 and Dec 31.";
-  }
-  requestAnimationFrame(()=>{ quoteEl.classList.add('show'); });
+/* ================== MUSIC ================== */
+let audio;
+playBtn.onclick = () => {
+  const q = map.get(currentDate);
+  if(!q || !q.music) { alert("No music today"); return; }
+  if(audio && !audio.paused){ audio.pause(); return; }
+  audio = new Audio(q.music);
+  audio.play();
+};
+
+/* ================== BOOKMARK ================== */
+bookmarkBtn.onclick = () => {
+  localStorage.setItem('bookmark', currentDate);
+  alert("Bookmarked ✅");
+};
+
+/* ================== HEARTS ================== */
+let fx;
+function startHearts(){
+  fx=setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="floating";
+    h.textContent="💖";
+    h.style.left=Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },500);
+}
+startHearts();
+
+/* ================== TRANSITION ================== */
+function transitionInto(mode){
+  overlay.classList.add("show");
+  setTimeout(()=>{
+    document.body.classList.add(mode);
+    overlay.classList.remove("show");
+  },1500);
 }
 
-setTimeout(()=>showForOffset(currentOffset), 80);
-
-document.getElementById('copyBtn').addEventListener('click', ()=>{
-  navigator.clipboard.writeText(quoteEl.innerText || "").then(()=>{ alert("Quote copied — paste it anywhere 💌"); });
-});
-
-document.getElementById('prevBtn').addEventListener('click', ()=>{
-  quoteEl.classList.remove('show');
-  currentOffset -= 1;
-  setTimeout(()=>showForOffset(currentOffset), 140);
-});
-
-document.getElementById('musicBtn').addEventListener('click', ()=>{
-  if(audio){ audio.paused ? audio.play() : audio.pause(); }
-});
-
-document.getElementById('bookmarkBtn').addEventListener('click', ()=>{
-  alert("Press Ctrl+D (or CMD+D on Mac) to bookmark this page.");
-});
-
-window.addEventListener('keydown', (e)=>{
-  if(e.key==='ArrowLeft') document.getElementById('prevBtn').click();
-});
-
-// Floating hearts
-function createFloatingHeart(){
-  const heart = document.createElement('div');
-  heart.className = 'floating-heart';
-  heart.textContent = '💖';
-  heart.style.left = Math.random()*100+'vw';
-  heart.style.fontSize = (20+Math.random()*20)+'px';
-  heart.style.animationDuration = (3+Math.random()*3)+'s';
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(), 6000);
+/* ================== CHRISTMAS ================== */
+function christmas(){
+  clearInterval(fx);
+  transitionInto("christmas");
+  fx=setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="snow";
+    s.textContent = Math.random()<0.5?"❄️":"❄️";
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=5+Math.random()*4+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),9000);
+  },300);
 }
-setInterval(createFloatingHeart, 500);
+
+/* ================== BIRTHDAY ================== */
+function birthday(){
+  clearInterval(fx);
+  transitionInto("birthday");
+  fx=setInterval(()=>{
+    // balloons
+    const b = document.createElement("div");
+    b.className="balloon";
+    b.textContent = "🎈";
+    b.style.left=Math.random()*100+"vw";
+    b.style.fontSize=20+Math.random()*30+"px";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),9000);
+
+    // confetti
+    const c = document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.setProperty('--h', Math.floor(Math.random()*360));
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  },300);
+}
+
+/* ================== AUTO TRIGGERS ================== */
+const today = new Date();
+if(today.getMonth()+1===12 && today.getDate()===25) setTimeout(christmas,1200); // Xmas
+if(today.getMonth()+1===12 && today.getDate()===28) setTimeout(birthday,1200);  // Birthday
+
 </script>
 </body>
 </html>
