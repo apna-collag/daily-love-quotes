@@ -10,11 +10,19 @@
 html,body { 
   min-height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
   font-family: system-ui, -apple-system, Segoe UI, Roboto; 
 }
-body { display: grid; place-items: center; background: linear-gradient(180deg, #0f172a, #071129); color: #fff; padding: 28px; transition: background 2s ease; }
 
+body {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #0f172a, #071129);
+  color: #fff;
+  padding: 28px;
+  transition: background 2s ease;
+}
+
+/* ================= CARD ================= */
 .card {
   width: min(980px, 96%);
   background: rgba(255,255,255,0.04);
@@ -25,75 +33,101 @@ body { display: grid; place-items: center; background: linear-gradient(180deg, #
   backdrop-filter: blur(6px);
   position: relative;
   z-index: 5;
-  transition: background 1s, border 1s, color 1s;
 }
 
 .date { opacity: .7; margin-bottom: 12px; font-weight: 600; }
 .title { display:flex; gap:12px; justify-content:center; align-items:center; }
-.title h1 { font-weight: 700; }
 .heart { width:42px; height:42px; display:grid; place-items:center; background:#ff5e9e; border-radius:50%; animation:pulse 2.8s infinite; }
 @keyframes pulse { 50%{transform:scale(1.08)} }
 
-.quote { font-size: clamp(18px, 2.6vw, 30px); margin: 24px 0; opacity: 0; transform: translateY(40px); transition: all .8s ease; white-space: pre-wrap; }
-.quote.show { opacity: 1; transform: translateY(0); }
+.quote {
+  font-size: clamp(18px, 2.6vw, 30px);
+  margin: 24px 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all .8s ease;
+  white-space: pre-wrap;
+}
+.quote.show { opacity:1; transform:translateY(0); }
 
 .actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-button { padding:10px 14px; border-radius:10px; border:0; background:rgba(255,255,255,.08); color:white; cursor:pointer; font-weight: 600; }
+button {
+  padding:10px 14px;
+  border-radius:10px;
+  border:0;
+  background:rgba(255,255,255,.08);
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
 
-/* Overlay */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); opacity:0; transition:opacity 1.5s ease; pointer-events:none; z-index:3; }
+/* ================= OVERLAY ================= */
+.overlay {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 5s ease;
+  z-index:3;
+}
 .overlay.show { opacity:1; }
 
-/* Floating Hearts */
-.floating { position:fixed; bottom:-40px; font-size:24px; animation:floatUp 6s linear; }
-@keyframes floatUp { to { transform:translateY(-120vh); opacity:0 } }
+/* ================= FLOATING HEARTS ================= */
+.floating {
+  position:fixed;
+  bottom:-40px;
+  font-size:24px;
+  animation:floatUp 6s linear;
+}
+@keyframes floatUp {
+  to { transform:translateY(-120vh); opacity:0 }
+}
 
-/* Snow */
-.snow { position:fixed; top:-30px; font-size:20px; animation:snowFall linear; }
-@keyframes snowFall { to { transform:translateY(120vh); } }
+/* ================= FIREWORKS ================= */
+.firework {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(var(--h),100%,60%);
+  animation: explode 1.5s ease-out forwards;
+}
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+}
 
-/* Balloons */
-.balloon { position:fixed; bottom:-60px; font-size:32px; animation:balloonUp 9s ease-in; }
-@keyframes balloonUp { to { transform:translateY(-120vh); opacity:0 } }
+/* ================= THEMES ================= */
 
-/* Confetti */
-.confetti { position:fixed; width:8px; height:14px; background:hsl(var(--h),90%,60%); animation:confetti 4s ease-out; }
-@keyframes confetti { to { transform:translateY(120vh) rotate(720deg); opacity:0 } }
-
-/* Christmas Decorations */
-.christmas-deco { position:fixed; font-size:48px; z-index: 10; }
-.christmas-tree { left: 5%; bottom: 0; animation: sway 3s ease-in-out infinite alternate; }
-.santa { right: 5%; bottom: 0; animation: floatSanta 4s ease-in-out infinite alternate; }
-.mistletoe { left: 45%; top: 10%; }
-.jingle { right: 25%; top: 15%; }
-@keyframes sway { 0%{transform: rotate(-5deg);} 100%{transform: rotate(5deg);} }
-@keyframes floatSanta { 0%{transform: translateY(0);} 50%{transform: translateY(-15px);} 100%{transform: translateY(0);} }
-
-/* ================= CHRISTMAS THEME COLORS ================= */
+/* CHRISTMAS */
 body.christmas {
   background: radial-gradient(circle,#8B0000CC,#071129);
 }
-body.christmas .card {
-  background: rgba(139, 0, 0, 0.7);
-  border:2px solid #fff;
-  color: #fff;
-}
-body.christmas .date { color: #FFD700; font-weight: 800; }
-body.christmas .title h1 { color: #FF4500; }
-body.christmas .quote { color: #FFFFFF; font-weight: 700; }
 
-/* ================= BIRTHDAY THEME COLORS ================= */
+/* BIRTHDAY */
 body.birthday {
   background: radial-gradient(circle,#FFCC00CC,#FF66CC66,#66CCFF66);
 }
-body.birthday .card {
-  background: rgba(255,255,255,0.2);
-  border:2px dashed #fff;
-  color: #222;
+
+/* NEW YEAR */
+body.newyear {
+  background: radial-gradient(circle at top,#1e3a8a,#020617);
 }
-body.birthday .date { color: #FF3366; font-weight: 700; }
-body.birthday .title h1 { color: #FF6600; }
-body.birthday .quote { color: #222; font-weight: 700; }
+body.newyear .card {
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 40px #FFD70055;
+}
+body.newyear .title h1 {
+  color: #FFD700;
+}
+body.newyear .quote {
+  color: #fff;
+  font-weight: 700;
+}
 
 </style>
 </head>
@@ -117,14 +151,8 @@ body.birthday .quote { color: #222; font-weight: 700; }
   </div>
 </div>
 
-<!-- Christmas Decorations -->
-<div class="christmas-deco christmas-tree">🎄</div>
-<div class="christmas-deco santa">🎅</div>
-<div class="christmas-deco mistletoe">🌿</div>
-<div class="christmas-deco jingle">🔔</div>
-
 <script>
-/* ================== QUOTES ================== */
+/* ================= QUOTES ================= */
 const quotes = [
   { "date": "2025-12-06", "quote": "Asmita my babyy im falling for for you everyday harder than yesterday Rest well Eat Well And Keep Smiling Cutiee I LOVE YOU BABYY", "music":"music/_DAY6.mp3" },
   { "date": "2025-12-07", "quote": "Babbyy dayss may be hard But You make me harder HIHIHIIH .Never Stop Trying Babbyyy I reallyy belive You'll acheive everything you dream off I LOVE YOU BABYY", "music":"music/_DAY7.wav" },
@@ -151,20 +179,16 @@ const quotes = [
   {"date": "2025-12-28","quote": "babbyy finally mera birthday agya hiihihih but not so hihihi for you kyuki mai bara hojaunga na ab to mai BIG BOY and alsoo my first time celebrating with my babbyyy hihihih babyy ne kya banya hoga ohh my gooodddd ohh my gooooodd itna mehnat krke bna rhi haimellaa babbyyyy and i knooww ki acha hi bnegaa meri babbyy ne joo banaya haiii ek raaz kii baat btauu kisii ko btana mt okayy mai ne apna cake katne se pehle hi wish mang liya haiii hihhiih mai nai btaunga maine kya manga but there will be signs aur jiske lie manga haii wahii ye par rhii hogii and thank you for being in my lifeeee i wish to celebrate each birthday with you in it mella babyy i loooooove youu mellaa blessing mellaa highlight of the year melaa chashmish mella babyy mella cutiie mella happy days mellla chaii partner mellla gym babyyy mellla honeybun mellla lipbalm taster mellaa sweet recipes taste krne walii mella itne pyar se hath pkrne walii mella phoool kharidne ka reason mellla skincare ka motivation mella motivation mellaa happy placee mellaa huggie krne walii babbyy I LOOOVE YOUUUU","music": "music/_DAY28.mp3"},
   {"date": "2025-12-29","quote": "babyyy hihihi hogya mera birthdayyy im 21 nowww and i hope you liked the scarf babbyy mujhe pta to tha ki thora time lgega but pta nahi kyu tha aisa dimag mee ki babbyy k lie bna raha hoon heres no option like ohh nai hua merese maii socha haii too babyy ko milenege hii aur thankfully time pe complete bhi hogya tha aur plan to aisa kuch hi thaa kii wo aese wrapped rhega uske upr ribbon aur wooo fir wo scarf aur uske andr woo ekk note hihih mai tmhe idhr bta dera hoon cutiie kya hii hota waisee something like babyy my looove ye meri taraf se from your babyyy not just a red scarf but a promise like KIMI NO NAWA that i ill find you in every universe and never give up on youu and alsoo ATTACK ON TITAN jisme main character apni girlfriend ko wrap kra deta hai smybolizing hope patience and alsooo ki no matter the circumstances i alwayss loooove youu my babbyy and protect youu cutiiee and againn thank you cutiie for being in my lifee and i reallyy looove you my babyyy","music": "music/_DAY29.mp3"},
   {"date": "2025-12-30","quote": "BABYY WE ALMOST REACHED THE END OF THE YEAR AND YAAA PTA NHII KYAA FEEL KRRA HOON THORA EMOTIONAL BOHT ZADA HAPPPYY BOOHT ZADA GRATEFUL ANDD BOHHT ZADA LOOOOOOOOOVED HIHIH KYUKII TMM JO HOOOO BABBBYY I LOOOOOVE YOU CUTIIEEE"},
-  {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOU BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE EMOTIONAL CONNECTION AND HMARA BABYYSHIP NEVER ENDS","music": "music/_DAY31.mp3"}
-];
+  {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOUR BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE EMOTIONAL CONNECTION AND HMARA BABYYSHIP NEVER ENDS","music": "music/_DAY31.mp3"}
+]; // KEEP YOUR FULL QUOTES ARRAY AS IS
 const map = new Map(quotes.map(q=>[q.date,q]));
 
-/* ================== ELEMENTS ================== */
+/* ================= ELEMENTS ================= */
 const quoteEl = document.getElementById("quoteText");
 const dateLabel = document.getElementById("dateLabel");
 const overlay = document.getElementById("overlay");
-const prevBtn = document.getElementById("prevBtn");
-const copyBtn = document.getElementById("copyBtn");
-const playBtn = document.getElementById("playBtn");
-const bookmarkBtn = document.getElementById("bookmarkBtn");
 
-/* ================== DATE LOGIC ================== */
+/* ================= DATE ================= */
 function pad(n){return n<10?"0"+n:n}
 function todayKey(){
   const d=new Date();
@@ -172,112 +196,48 @@ function todayKey(){
 }
 function showQuote(key){
   const q = map.get(key) || {quote:"You are always loved ❤️"};
-  dateLabel.textContent = `For ${new Date(key).toLocaleDateString('en-US', {day:'numeric', month:'short', year:'numeric'})} — made with love ❤️`;
+  dateLabel.textContent = `For ${new Date(key).toDateString()} — made with love ❤️`;
   quoteEl.textContent = q.quote;
   quoteEl.classList.add("show");
 }
-
-/* ================== INITIAL SHOW ================== */
-let currentDate = todayKey();
+let currentDate=todayKey();
 showQuote(currentDate);
 
-/* ================== PREVIOUS DAY ================== */
-prevBtn.onclick = () => {
-  const d = new Date(currentDate);
-  d.setDate(d.getDate() - 1);
-  currentDate = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  showQuote(currentDate);
-};
-
-/* ================== COPY ================== */
-copyBtn.onclick = () => {
-  navigator.clipboard.writeText(quoteEl.innerText);
-  alert("Copied ❤️");
-};
-
-/* ================== MUSIC ================== */
-let audio;
-playBtn.onclick = () => {
-  const q = map.get(currentDate);
-  if(!q || !q.music) { alert("No music today"); return; }
-  if(audio && !audio.paused){ audio.pause(); return; }
-  audio = new Audio(q.music);
-  audio.play();
-};
-
-/* ================== BOOKMARK ================== */
-bookmarkBtn.onclick = () => {
-  localStorage.setItem('bookmark', currentDate);
-  alert("Bookmarked ✅");
-};
-
-/* ================== HEARTS ================== */
-let fx;
-function startHearts(){
-  fx=setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="floating";
-    h.textContent="💖";
-    h.style.left=Math.random()*100+"vw";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),6000);
-  },500);
-}
-startHearts();
-
-/* ================== TRANSITION ================== */
+/* ================= TRANSITION (5s) ================= */
 function transitionInto(mode){
   overlay.classList.add("show");
   setTimeout(()=>{
-    document.body.classList.add(mode);
+    document.body.className = mode;
     overlay.classList.remove("show");
-  },1500);
+  },5000);
 }
 
-/* ================== CHRISTMAS ================== */
-function christmas(){
-  clearInterval(fx);
-  transitionInto("christmas");
-  fx=setInterval(()=>{
-    const s=document.createElement("div");
-    s.className="snow";
-    s.textContent = Math.random()<0.5?"❄️":"❄️";
-    s.style.left=Math.random()*100+"vw";
-    s.style.animationDuration=5+Math.random()*4+"s";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),9000);
-  },300);
+/* ================= FIREWORKS ================= */
+function fireworks(){
+  setInterval(()=>{
+    for(let i=0;i<25;i++){
+      const f=document.createElement("div");
+      f.className="firework";
+      f.style.left=Math.random()*100+"vw";
+      f.style.top=Math.random()*100+"vh";
+      f.style.setProperty("--x",(Math.random()*200-100)+"px");
+      f.style.setProperty("--y",(Math.random()*200-100)+"px");
+      f.style.setProperty("--h",Math.random()*360);
+      document.body.appendChild(f);
+      setTimeout(()=>f.remove(),1500);
+    }
+  },800);
 }
 
-/* ================== BIRTHDAY ================== */
-function birthday(){
-  clearInterval(fx);
-  transitionInto("birthday");
-  fx=setInterval(()=>{
-    // balloons
-    const b = document.createElement("div");
-    b.className="balloon";
-    b.textContent = "🎈";
-    b.style.left=Math.random()*100+"vw";
-    b.style.fontSize=20+Math.random()*30+"px";
-    document.body.appendChild(b);
-    setTimeout(()=>b.remove(),9000);
-
-    // confetti
-    const c = document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.setProperty('--h', Math.floor(Math.random()*360));
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),4000);
-  },300);
+/* ================= AUTO TRIGGERS ================= */
+const today=new Date();
+if(today.getMonth()+1===12 && today.getDate()===25) transitionInto("christmas");
+if(today.getMonth()+1===12 && today.getDate()===28) transitionInto("birthday");
+if(today.getMonth()+1===12 && today.getDate()===31){
+  transitionInto("newyear");
+  fireworks();
 }
-
-/* ================== AUTO TRIGGERS ================== */
-const today = new Date();
-if(today.getMonth()+1===12 && today.getDate()===25) setTimeout(christmas,5000); // Xmas
-if(today.getMonth()+1===12 && today.getDate()===28) setTimeout(birthday,5000);  // Birthday
-
 </script>
+
 </body>
 </html>
