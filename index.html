@@ -19,10 +19,9 @@ body {
   background: linear-gradient(180deg, #0f172a, #071129);
   color: #fff;
   padding: 28px;
-  transition: background 2s ease;
 }
 
-/* ================= CARD ================= */
+/* CARD */
 .card {
   width: min(980px, 96%);
   background: rgba(255,255,255,0.04);
@@ -31,7 +30,6 @@ body {
   text-align: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   backdrop-filter: blur(6px);
-  position: relative;
   z-index: 5;
 }
 
@@ -43,48 +41,41 @@ body {
 .quote {
   font-size: clamp(18px, 2.6vw, 30px);
   margin: 24px 0;
+  white-space: pre-wrap;
   opacity: 0;
   transform: translateY(40px);
-  transition: all .8s ease;
-  white-space: pre-wrap;
+  transition: .8s;
 }
-.quote.show { opacity:1; transform:translateY(0); }
+.quote.show { opacity:1; transform:none; }
 
-.actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.actions {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 button {
   padding:10px 14px;
   border-radius:10px;
   border:0;
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.12);
   color:white;
   cursor:pointer;
   font-weight:600;
 }
 
-/* ================= OVERLAY ================= */
+/* OVERLAY */
 .overlay {
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.9);
+  background:black;
   opacity:0;
   pointer-events:none;
   transition:opacity 5s ease;
-  z-index:3;
 }
-.overlay.show { opacity:1; }
+.overlay.show { opacity:.9; }
 
-/* ================= FLOATING HEARTS ================= */
-.floating {
-  position:fixed;
-  bottom:-40px;
-  font-size:24px;
-  animation:floatUp 6s linear;
-}
-@keyframes floatUp {
-  to { transform:translateY(-120vh); opacity:0 }
-}
-
-/* ================= FIREWORKS ================= */
+/* FIREWORKS */
 .firework {
   position: fixed;
   width: 6px;
@@ -100,35 +91,14 @@ button {
   }
 }
 
-/* ================= THEMES ================= */
-
-/* CHRISTMAS */
-body.christmas {
-  background: radial-gradient(circle,#8B0000CC,#071129);
-}
-
-/* BIRTHDAY */
-body.birthday {
-  background: radial-gradient(circle,#FFCC00CC,#FF66CC66,#66CCFF66);
-}
-
-/* NEW YEAR */
+/* THEMES */
 body.newyear {
   background: radial-gradient(circle at top,#1e3a8a,#020617);
 }
 body.newyear .card {
-  background: rgba(0,0,0,0.6);
-  border: 2px solid #FFD700;
-  box-shadow: 0 0 40px #FFD70055;
+  border:2px solid gold;
+  box-shadow:0 0 40px #FFD70066;
 }
-body.newyear .title h1 {
-  color: #FFD700;
-}
-body.newyear .quote {
-  color: #fff;
-  font-weight: 700;
-}
-
 </style>
 </head>
 
@@ -142,7 +112,8 @@ body.newyear .quote {
     <div class="heart">💖</div>
     <h1>Today’s special quote</h1>
   </div>
-  <div class="quote" id="quoteText">Loading…</div>
+  <div class="quote" id="quoteText"></div>
+
   <div class="actions">
     <button id="prevBtn">◀ Previous Day</button>
     <button id="copyBtn">Copy Quote</button>
@@ -150,6 +121,8 @@ body.newyear .quote {
     <button id="bookmarkBtn">☆ Bookmark</button>
   </div>
 </div>
+
+<audio id="audio"></audio>
 
 <script>
 /* ================= QUOTES ================= */
@@ -180,42 +153,81 @@ const quotes = [
   {"date": "2025-12-29","quote": "babyyy hihihi hogya mera birthdayyy im 21 nowww and i hope you liked the scarf babbyy mujhe pta to tha ki thora time lgega but pta nahi kyu tha aisa dimag mee ki babbyy k lie bna raha hoon heres no option like ohh nai hua merese maii socha haii too babyy ko milenege hii aur thankfully time pe complete bhi hogya tha aur plan to aisa kuch hi thaa kii wo aese wrapped rhega uske upr ribbon aur wooo fir wo scarf aur uske andr woo ekk note hihih mai tmhe idhr bta dera hoon cutiie kya hii hota waisee something like babyy my looove ye meri taraf se from your babyyy not just a red scarf but a promise like KIMI NO NAWA that i ill find you in every universe and never give up on youu and alsoo ATTACK ON TITAN jisme main character apni girlfriend ko wrap kra deta hai smybolizing hope patience and alsooo ki no matter the circumstances i alwayss loooove youu my babbyy and protect youu cutiiee and againn thank you cutiie for being in my lifee and i reallyy looove you my babyyy","music": "music/_DAY29.mp3"},
   {"date": "2025-12-30","quote": "BABYY WE ALMOST REACHED THE END OF THE YEAR AND YAAA PTA NHII KYAA FEEL KRRA HOON THORA EMOTIONAL BOHT ZADA HAPPPYY BOOHT ZADA GRATEFUL ANDD BOHHT ZADA LOOOOOOOOOVED HIHIH KYUKII TMM JO HOOOO BABBBYY I LOOOOOVE YOU CUTIIEEE"},
   {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOUR BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE EMOTIONAL CONNECTION AND HMARA BABYYSHIP NEVER ENDS","music": "music/_DAY31.mp3"}
-]; // KEEP YOUR FULL QUOTES ARRAY AS IS
+];
 const map = new Map(quotes.map(q=>[q.date,q]));
 
 /* ================= ELEMENTS ================= */
 const quoteEl = document.getElementById("quoteText");
 const dateLabel = document.getElementById("dateLabel");
+const audio = document.getElementById("audio");
 const overlay = document.getElementById("overlay");
+
+const prevBtn = document.getElementById("prevBtn");
+const copyBtn = document.getElementById("copyBtn");
+const playBtn = document.getElementById("playBtn");
+const bookmarkBtn = document.getElementById("bookmarkBtn");
 
 /* ================= DATE ================= */
 function pad(n){return n<10?"0"+n:n}
-function todayKey(){
-  const d=new Date();
+function keyFromDate(d){
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
+let currentDate = keyFromDate(new Date());
+
 function showQuote(key){
   const q = map.get(key) || {quote:"You are always loved ❤️"};
   dateLabel.textContent = `For ${new Date(key).toDateString()} — made with love ❤️`;
-  quoteEl.textContent = q.quote;
-  quoteEl.classList.add("show");
+  quoteEl.classList.remove("show");
+  setTimeout(()=>{
+    quoteEl.textContent = q.quote;
+    quoteEl.classList.add("show");
+  },200);
+
+  if(q.music){
+    audio.src = q.music;
+    playBtn.textContent = "▶ Play Music";
+  }
 }
-let currentDate=todayKey();
 showQuote(currentDate);
 
-/* ================= TRANSITION (5s) ================= */
-function transitionInto(mode){
-  overlay.classList.add("show");
-  setTimeout(()=>{
-    document.body.className = mode;
-    overlay.classList.remove("show");
-  },5000);
-}
+/* ================= BUTTONS ================= */
+prevBtn.onclick = () => {
+  const d = new Date(currentDate);
+  d.setDate(d.getDate() - 1);
+  currentDate = keyFromDate(d);
+  showQuote(currentDate);
+};
 
-/* ================= FIREWORKS ================= */
-function fireworks(){
+copyBtn.onclick = async () => {
+  await navigator.clipboard.writeText(quoteEl.textContent);
+  copyBtn.textContent = "✓ Copied";
+  setTimeout(()=>copyBtn.textContent="Copy Quote",1500);
+};
+
+playBtn.onclick = () => {
+  if(audio.paused){
+    audio.play();
+    playBtn.textContent = "⏸ Pause Music";
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶ Play Music";
+  }
+};
+
+bookmarkBtn.onclick = () => {
+  localStorage.setItem("favQuote", currentDate);
+  bookmarkBtn.textContent = "★ Bookmarked";
+  setTimeout(()=>bookmarkBtn.textContent="☆ Bookmark",1500);
+};
+
+/* ================= NEW YEAR ================= */
+const today = new Date();
+if(today.getMonth()===11 && today.getDate()===31){
+  document.body.classList.add("newyear");
+  overlay.classList.add("show");
+  setTimeout(()=>overlay.classList.remove("show"),5000);
   setInterval(()=>{
-    for(let i=0;i<25;i++){
+    for(let i=0;i<20;i++){
       const f=document.createElement("div");
       f.className="firework";
       f.style.left=Math.random()*100+"vw";
@@ -226,16 +238,7 @@ function fireworks(){
       document.body.appendChild(f);
       setTimeout(()=>f.remove(),1500);
     }
-  },800);
-}
-
-/* ================= AUTO TRIGGERS ================= */
-const today=new Date();
-if(today.getMonth()+1===12 && today.getDate()===25) transitionInto("christmas");
-if(today.getMonth()+1===12 && today.getDate()===28) transitionInto("birthday");
-if(today.getMonth()+1===12 && today.getDate()===31){
-  transitionInto("newyear");
-  fireworks();
+  },900);
 }
 </script>
 
