@@ -33,7 +33,14 @@ body {
   z-index: 5;
 }
 
-.date { opacity: .7; margin-bottom: 12px; font-weight: 600; }
+.date { opacity: .7; margin-bottom: 10px; font-weight: 600; }
+
+.progress {
+  font-size: 14px;
+  opacity: .75;
+  margin-bottom: 18px;
+}
+
 .title { display:flex; gap:12px; justify-content:center; align-items:center; }
 .heart { width:42px; height:42px; display:grid; place-items:center; background:#ff5e9e; border-radius:50%; animation:pulse 2.8s infinite; }
 @keyframes pulse { 50%{transform:scale(1.08)} }
@@ -108,10 +115,13 @@ body.newyear .card {
 
 <div class="card">
   <div class="date" id="dateLabel"></div>
+  <div class="progress" id="yearProgress"></div>
+
   <div class="title">
     <div class="heart">💖</div>
     <h1>Today’s special quote</h1>
   </div>
+
   <div class="quote" id="quoteText"></div>
 
   <div class="actions">
@@ -125,6 +135,40 @@ body.newyear .card {
 <audio id="audio"></audio>
 
 <script>
+/* ================= YEAR PROGRESS ================= */
+function updateYearProgress(){
+  const endOf2025 = new Date("2025-12-31T23:59:59");
+  const now = new Date();
+
+  if(now <= endOf2025){
+    document.getElementById("yearProgress").textContent = "";
+    return;
+  }
+
+  const diffMs = now - endOf2025;
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  let text = "";
+
+  if(diffDays < 30){
+    text = `2025 was just ${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+  } 
+  else if(diffDays < 365){
+    const months = Math.floor(diffDays / 30);
+    const days = diffDays % 30;
+    text = `2025 was ${months} month${months !== 1 ? "s" : ""}${days ? ` ${days} day${days !== 1 ? "s" : ""}` : ""} ago`;
+  } 
+  else {
+    const years = Math.floor(diffDays / 365);
+    text = `2025 was ${years} year${years !== 1 ? "s" : ""} ago`;
+  }
+
+  document.getElementById("yearProgress").textContent = text;
+}
+
+updateYearProgress();
+updateYearProgress();
+
 /* ================= QUOTES ================= */
 const quotes = [
   { "date": "2025-12-06", "quote": "Asmita my babyy im falling for for you everyday harder than yesterday Rest well Eat Well And Keep Smiling Cutiee I LOVE YOU BABYY", "music":"music/_DAY6.mp3" },
@@ -152,7 +196,7 @@ const quotes = [
   {"date": "2025-12-28","quote": "babbyy finally mera birthday agya hiihihih but not so hihihi for you kyuki mai bara hojaunga na ab to mai BIG BOY and alsoo my first time celebrating with my babbyyy hihihih babyy ne kya banya hoga ohh my gooodddd ohh my gooooodd itna mehnat krke bna rhi haimellaa babbyyyy and i knooww ki acha hi bnegaa meri babbyy ne joo banaya haiii ek raaz kii baat btauu kisii ko btana mt okayy mai ne apna cake katne se pehle hi wish mang liya haiii hihhiih mai nai btaunga maine kya manga but there will be signs aur jiske lie manga haii wahii ye par rhii hogii and thank you for being in my lifeeee i wish to celebrate each birthday with you in it mella babyy i loooooove youu mellaa blessing mellaa highlight of the year melaa chashmish mella babyy mella cutiie mella happy days mellla chaii partner mellla gym babyyy mellla honeybun mellla lipbalm taster mellaa sweet recipes taste krne walii mella itne pyar se hath pkrne walii mella phoool kharidne ka reason mellla skincare ka motivation mella motivation mellaa happy placee mellaa huggie krne walii babbyy I LOOOVE YOUUUU","music": "music/_DAY28.mp3"},
   {"date": "2025-12-29","quote": "babyyy hihihi hogya mera birthdayyy im 21 nowww and i hope you liked the scarf babbyy mujhe pta to tha ki thora time lgega but pta nahi kyu tha aisa dimag mee ki babbyy k lie bna raha hoon heres no option like ohh nai hua merese maii socha haii too babyy ko milenege hii aur thankfully time pe complete bhi hogya tha aur plan to aisa kuch hi thaa kii wo aese wrapped rhega uske upr ribbon aur wooo fir wo scarf aur uske andr woo ekk note hihih mai tmhe idhr bta dera hoon cutiie kya hii hota waisee something like babyy my looove ye meri taraf se from your babyyy not just a red scarf but a promise like KIMI NO NAWA that i ill find you in every universe and never give up on youu and alsoo ATTACK ON TITAN jisme main character apni girlfriend ko wrap kra deta hai smybolizing hope patience and alsooo ki no matter the circumstances i alwayss loooove youu my babbyy and protect youu cutiiee and againn thank you cutiie for being in my lifee and i reallyy looove you my babyyy","music": "music/_DAY29.mp3"},
   {"date": "2025-12-30","quote": "BABYY WE ALMOST REACHED THE END OF THE YEAR AND YAAA PTA NHII KYAA FEEL KRRA HOON THORA EMOTIONAL BOHT ZADA HAPPPYY BOOHT ZADA GRATEFUL ANDD BOHHT ZADA LOOOOOOOOOVED HIHIH KYUKII TMM JO HOOOO BABBBYY I LOOOOOVE YOU CUTIIEEE"},
-  {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOUR BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE  CONNECTION AND HMARA BABYYSHIP NEVER ENDS Aur hnn Babbyy ye  is month ka last quote hogaa waise new year tk bhi ho skta tha but aese hihih December k lie tha taki tmhe aese poore December motivation milta rahe i hope it worked thooora and tum aur meee aese hii happy happy vibes k sathh ebter  kre 2026 and babbbyyy i loooove you my heart youre the bestestt hmeshhaaaa","music": "music/_DAY31.mp3"}
+  {"date": "2025-12-31","quote": " BABYY WE HAVE REACHED THE END OF THE YEARR I REALLY REALLY REALLLLYY WANNA THANK YOU YOUR BEING INTO MY LIFE AND MAKING IT A 1000x BETTER LIKE TMHARA HONAA REALLY CREATES A DIFFERENCE BABBBYY BAS ITNA KEHNA CHAHTA HOON KIII IM REALLLY REALLY GRATEFUL TO YOU FOR BEING INTO MY LIFE YOU REALLY LIGHT UP MY WORLDD BABBYY AND I WISH TOO AESE HII HMESHHA REHNAA TMHARE SATHH BEING YOUR SUPOORT BEING YOUR SMILE BEING YOUR BABBYYY I REALLY REALLY LOOVE YOU FROM MY HEART CUTIE JUSTT WANNA SAYY BABYY YOU REALLYY MADE ME FEEL LOVED SEEMS AESE UNREAL TYPES HII KIII I MET A GIRL WO BHI IN GYM SHE WAS INTERSTED FIRST BUTT YAA I FELL HARDER AND YAA HMARII FIRST DATE AESE CHAII DUKAN THA POOJA GHUMA HAPPY SAD TIMES DONO SHARE KIYE EKDOOSRE KE GOOD AUR NOT SO GOOD SIDES DEKHE HMNE CHRISTMAS BHI GHOOMA HIHIH DECEMBER BHI EK SATH SPEND KIYA AND YAA HERE WE ARE AESE EKSATH AESE YEAR END KRNE JARE I FEEL LIKE HUGGING YOUU BABBYY I LOOOOOOOVE YOU BABBYY AUR AESE HMESHA KRTA RHOOONGA I HOPE NEXT YEAR BRINGS USS MORE LOVEE MORE MEMORIES MORE EMOTIONAL CONNECTION AND HMARA BABYYSHIP NEVER ENDS","music": "music/_DAY31.mp3"}
 ];
 const map = new Map(quotes.map(q=>[q.date,q]));
 
@@ -172,7 +216,8 @@ function pad(n){return n<10?"0"+n:n}
 function keyFromDate(d){
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
-let currentDate = keyFromDate(new Date());
+const LAST_DATE = "2025-12-31";
+let currentDate = LAST_DATE;
 
 function showQuote(key){
   const q = map.get(key) || {quote:"You are always loved ❤️"};
@@ -226,19 +271,6 @@ if(today.getMonth()===11 && today.getDate()===31){
   document.body.classList.add("newyear");
   overlay.classList.add("show");
   setTimeout(()=>overlay.classList.remove("show"),5000);
-  setInterval(()=>{
-    for(let i=0;i<20;i++){
-      const f=document.createElement("div");
-      f.className="firework";
-      f.style.left=Math.random()*100+"vw";
-      f.style.top=Math.random()*100+"vh";
-      f.style.setProperty("--x",(Math.random()*200-100)+"px");
-      f.style.setProperty("--y",(Math.random()*200-100)+"px");
-      f.style.setProperty("--h",Math.random()*360);
-      document.body.appendChild(f);
-      setTimeout(()=>f.remove(),1500);
-    }
-  },900);
 }
 </script>
 
