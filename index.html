@@ -82,20 +82,30 @@ button {
 }
 .overlay.show { opacity:.9; }
 
-/* FIREWORKS */
-.firework {
+/* DREAM MODE */
+.dream {
   position: fixed;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: hsl(var(--h),100%,60%);
-  animation: explode 1.5s ease-out forwards;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at center, #020617, #000);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  z-index: 20;
 }
-@keyframes explode {
-  to {
-    transform: translate(var(--x), var(--y)) scale(0);
-    opacity: 0;
-  }
+.dream.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.dream-text {
+  font-size: clamp(22px, 3vw, 42px);
+  opacity: .85;
+  text-align: center;
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  50% { transform: translateY(-12px); opacity: 1; }
 }
 
 /* THEMES */
@@ -132,6 +142,10 @@ body.newyear .card {
   </div>
 </div>
 
+<div class="dream" id="dream">
+  <div class="dream-text" id="dreamText"></div>
+</div>
+
 <audio id="audio"></audio>
 
 <script>
@@ -139,34 +153,21 @@ body.newyear .card {
 function updateYearProgress(){
   const endOf2025 = new Date("2025-12-31T23:59:59");
   const now = new Date();
-
   if(now <= endOf2025){
     document.getElementById("yearProgress").textContent = "";
     return;
   }
-
-  const diffMs = now - endOf2025;
-  const diffDays = Math.floor(diffMs / 86400000);
-
+  const diffDays = Math.floor((now - endOf2025) / 86400000);
   let text = "";
-
   if(diffDays < 30){
-    text = `2025 was just ${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
-  } 
-  else if(diffDays < 365){
+    text = `2025 was just ${diffDays} day${diffDays!==1?"s":""} ago`;
+  } else {
     const months = Math.floor(diffDays / 30);
     const days = diffDays % 30;
-    text = `2025 was ${months} month${months !== 1 ? "s" : ""}${days ? ` ${days} day${days !== 1 ? "s" : ""}` : ""} ago`;
-  } 
-  else {
-    const years = Math.floor(diffDays / 365);
-    text = `2025 was ${years} year${years !== 1 ? "s" : ""} ago`;
+    text = `2025 was ${months} month${months!==1?"s":""}${days?` ${days} day${days!==1?"s":""}`:""} ago`;
   }
-
   document.getElementById("yearProgress").textContent = text;
 }
-
-updateYearProgress();
 updateYearProgress();
 
 /* ================= QUOTES ================= */
@@ -206,11 +207,6 @@ const dateLabel = document.getElementById("dateLabel");
 const audio = document.getElementById("audio");
 const overlay = document.getElementById("overlay");
 
-const prevBtn = document.getElementById("prevBtn");
-const copyBtn = document.getElementById("copyBtn");
-const playBtn = document.getElementById("playBtn");
-const bookmarkBtn = document.getElementById("bookmarkBtn");
-
 /* ================= DATE ================= */
 function pad(n){return n<10?"0"+n:n}
 function keyFromDate(d){
@@ -220,52 +216,64 @@ const LAST_DATE = "2025-12-31";
 let currentDate = LAST_DATE;
 
 function showQuote(key){
-  const q = map.get(key) || {quote:"You are always loved ❤️"};
+  const q = map.get(key);
   dateLabel.textContent = `For ${new Date(key).toDateString()} — made with love ❤️`;
   quoteEl.classList.remove("show");
   setTimeout(()=>{
     quoteEl.textContent = q.quote;
     quoteEl.classList.add("show");
   },200);
-
-  if(q.music){
-    audio.src = q.music;
-    playBtn.textContent = "▶ Play Music";
-  }
+  if(q.music) audio.src = q.music;
 }
 showQuote(currentDate);
 
-/* ================= BUTTONS ================= */
-prevBtn.onclick = () => {
-  const d = new Date(currentDate);
-  d.setDate(d.getDate() - 1);
-  currentDate = keyFromDate(d);
-  showQuote(currentDate);
-};
+/* ================= DREAM MODE ================= */
+const dream = document.getElementById("dream");
+const dreamText = document.getElementById("dreamText");
+let idleTimer, dreamTimer, dreamActive=false;
 
-copyBtn.onclick = async () => {
-  await navigator.clipboard.writeText(quoteEl.textContent);
-  copyBtn.textContent = "✓ Copied";
-  setTimeout(()=>copyBtn.textContent="Copy Quote",1500);
-};
-
-playBtn.onclick = () => {
-  if(audio.paused){
-    audio.play();
-    playBtn.textContent = "⏸ Pause Music";
-  } else {
-    audio.pause();
-    playBtn.textContent = "▶ Play Music";
+function dreamLines(){
+  const end = new Date("2025-12-31T23:59:59");
+  const now = new Date();
+  const days = Math.floor((now - end)/86400000);
+  const lines = [`2025 was just ${days} day${days!==1?"s":""} ago`];
+  const months = Math.floor(days/30);
+  for(let i=1;i<=Math.min(months,6);i++){
+    lines.push(`${i} month${i>1?"s":""} ago`);
   }
-};
+  return lines;
+}
 
-bookmarkBtn.onclick = () => {
-  localStorage.setItem("favQuote", currentDate);
-  bookmarkBtn.textContent = "★ Bookmarked";
-  setTimeout(()=>bookmarkBtn.textContent="☆ Bookmark",1500);
-};
+function startDream(){
+  dreamActive=true;
+  dream.classList.add("show");
+  quoteEl.classList.remove("show");
+  const lines=dreamLines();
+  let i=0;
+  dreamText.textContent=lines[i];
+  dreamTimer=setInterval(()=>{
+    i=Math.min(i+1,lines.length-1);
+    dreamText.textContent=lines[i];
+  },5000);
+}
+function stopDream(){
+  if(!dreamActive)return;
+  dreamActive=false;
+  dream.classList.remove("show");
+  clearInterval(dreamTimer);
+  quoteEl.classList.add("show");
+}
+function resetIdle(){
+  stopDream();
+  clearTimeout(idleTimer);
+  idleTimer=setTimeout(startDream,30000);
+}
+["mousemove","click","keydown","scroll","touchstart"].forEach(e=>{
+  document.addEventListener(e,resetIdle);
+});
+resetIdle();
 
-/* ================= NEW YEAR ================= */
+/* ================= NEW YEAR EFFECT ================= */
 const today = new Date();
 if(today.getMonth()===11 && today.getDate()===31){
   document.body.classList.add("newyear");
